@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.sinolife.model.PageBean;
 import com.sinolife.model.Publish;
 import com.sinolife.model.PublishDetail;
 import com.sinolife.service.PublishService;
@@ -36,55 +37,31 @@ public class PublishController {
 	@Autowired
 	private PublishService publishService;   
 	
-	/*
-	 * 添加排期
+	/**
+	 * 查询排期列表 
+	 * @param currentpage	当前页
+	 * @param pagesize		页面显示数
+	 * @return
 	 */
-	@RequestMapping(path = {"/addPublish"}, method = {RequestMethod.POST})
-    public void addPublish(@RequestParam(value = "publishDate") String publishDate,
-						     @RequestParam(value = "attribute",defaultValue="0") int attribute,
-						     @RequestParam(value = "managerId") int managerId,
-						     @RequestParam(value = "verifierId") int verifierId,
-						     @RequestParam(value = "deployerId") int deployerId) {
-		Publish publish = new Publish();
-		publish.setAttribute(attribute);
-		publish.setPublishDate(publishDate);
-		publish.setManagerId(managerId);
-		publish.setVerifierId(verifierId);
-		publish.setDeployerId(deployerId);
-		publish.setState(0);
-		publish.setCreatedDate(new Date());
-		publish.setUpdatedDate(new Date());
-		publishService.addPublish(publish);
+	@SuppressWarnings("unchecked")
+	@RequestMapping(path = {"/publish","/"}, method = {RequestMethod.GET})
+    @ResponseBody
+    public String index(@RequestParam(value = "currentpage",defaultValue="1") int currentpage,
+						@RequestParam(value = "pagesize",defaultValue="10") int pagesize) {
+		PageBean pageBean = publishService.getPublishOffset(currentpage,pagesize);
+		List<Publish> publishs = pageBean.getList();
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		List<Publish> result = new ArrayList<Publish>();
+		for (Publish publish : publishs) {
+			logger.info(publish.getPublishDate());
+			result.add(publish);
+		}
+		map.put("publishs", result);
+		String json = JSON.toJSONString(map);
+		logger.info(json);
+        return json;
     }
 	
-	/*
-	 * 查询排期
-	 */
-	@RequestMapping(path = {"/publish"}, method = {RequestMethod.POST,RequestMethod.GET})
-    @ResponseBody
-    public String publish(@RequestParam(value = "publishDate") String publishDate,HttpServletRequest request,HttpServletResponse response) {
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-	    List<Publish> result = new ArrayList<Publish>();
-		if (StringUtils.isBlank(publishDate)) {
-			map.put("error", "请输入日期");
-			String json = JSON.toJSONString(map);
-			logger.info(json);
-			return json;
-		}
-		Publish publish = publishService.getPublishByDate(publishDate);
-		if (publish==null) {
-			map.put("error", "未查询到排期结果");
-			String json = JSON.toJSONString(map);
-			logger.info(json);
-			return json;
-		}else{
-			result.add(publish);
-			map.put("publishs", result);
-		}
-		String json = JSON.toJSONString(map);
-		logger.info("json="+json);
-        return json;
-	}
 	
 	/*
 	 * 查询条线排期详情
