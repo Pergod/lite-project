@@ -106,7 +106,7 @@ public class PublishController {
 	 */
 	@RequestMapping(path = { "/uploadPublish" }, method = {RequestMethod.POST })
 	@ResponseBody
-	public String uploadImage(@RequestParam("file") MultipartFile excelFile) {
+	public String uploadExcel(@RequestParam("file") MultipartFile excelFile) {
 		try {
 			String fileUrl = publishService.saveFile(excelFile);
 			if (fileUrl == null) {
