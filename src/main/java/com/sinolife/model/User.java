@@ -8,94 +8,138 @@ import javax.validation.constraints.NotNull;
  * @author Flystar
  *
  */
-public class Employee {
+public class User {
 	@NotNull
 	private int id;
-	private String name;
+	private String userName;
+	private String passWord;
 	private String email;
 	private int age;
+	//微信昵称--用于免登录
+	private String wxNickName;
 	private int gender;
-	private int companyId;
-	private int deparntmentId;
+	private String center;
+	private String department;
 	private int spareDay;
-	private int role;
+	private String role;
 	private int state;
 	private Date createdDate;
 	private Date updatedDate;
 	
-	public Employee() {
+	public User() {
 	}
-	
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+
+	public String getUserName() {
+		return userName;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
+
+	public String getPassWord() {
+		return passWord;
+	}
+
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
+	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public int getAge() {
 		return age;
 	}
+
 	public void setAge(int age) {
 		this.age = age;
 	}
+
+	public String getWxNickName() {
+		return wxNickName;
+	}
+
+	public void setWxNickName(String wxNickName) {
+		this.wxNickName = wxNickName;
+	}
+
 	public int getGender() {
 		return gender;
 	}
+
 	public void setGender(int gender) {
 		this.gender = gender;
 	}
-	public int getCompanyId() {
-		return companyId;
+
+	public String getCenter() {
+		return center;
 	}
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+
+	public void setCenter(String center) {
+		this.center = center;
 	}
-	public int getDeparntmentId() {
-		return deparntmentId;
+
+	public String getDepartment() {
+		return department;
 	}
-	public void setDeparntmentId(int deparntmentId) {
-		this.deparntmentId = deparntmentId;
+
+	public void setDepartment(String department) {
+		this.department = department;
 	}
+
 	public int getSpareDay() {
 		return spareDay;
 	}
+
 	public void setSpareDay(int spareDay) {
 		this.spareDay = spareDay;
 	}
-	public int getRole() {
+
+	public String getRole() {
 		return role;
 	}
-	public void setRole(int role) {
+
+	public void setRole(String role) {
 		this.role = role;
 	}
+
 	public int getState() {
 		return state;
 	}
+
 	public void setState(int state) {
 		this.state = state;
 	}
+
 	public Date getCreatedDate() {
 		return createdDate;
 	}
+
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}
+
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+	
+	
 }

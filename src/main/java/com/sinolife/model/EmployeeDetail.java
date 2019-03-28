@@ -8,14 +8,14 @@ package com.sinolife.model;
 import java.util.List;
 public class EmployeeDetail {
 	
-	private Employee employee;
+	private User employee;
 	private Company company;
 	private Department department;
 	private List<JIRA> jiras;
-	public Employee getEmployee() {
+	public User getEmployee() {
 		return employee;
 	}
-	public void setEmployee(Employee employee) {
+	public void setEmployee(User employee) {
 		this.employee = employee;
 	}
 	public Company getCompany() {
