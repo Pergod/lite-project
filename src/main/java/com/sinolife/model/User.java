@@ -12,7 +12,7 @@ public class User {
 	@NotNull
 	private int id;
 	private String userName;
-	private String passWord;
+	private String password;
 	private String email;
 	private int age;
 	//微信昵称--用于免登录
@@ -45,12 +45,12 @@ public class User {
 		this.userName = userName;
 	}
 
-	public String getPassWord() {
-		return passWord;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -140,6 +140,5 @@ public class User {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-	
-	
+
 }
