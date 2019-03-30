@@ -13,16 +13,18 @@ public class Publish {
 	private int id;
 	private String publishDesc;
 	private int attribute;
-	
 	@NotNull
 	private String publishDate;
-	private int managerId;
-	private int verifierId;
-	private int deployerId;
+	
+	//管理人员
+	private String manager;
+	//验证人员
+	private String verifier;
+	//部署人员
+	private String deployer;
 	private int state;
 	private Date createdDate;
 	private Date updatedDate;
-	
 	public int getId() {
 		return id;
 	}
@@ -47,23 +49,23 @@ public class Publish {
 	public void setPublishDate(String publishDate) {
 		this.publishDate = publishDate;
 	}
-	public int getManagerId() {
-		return managerId;
+	public String getManager() {
+		return manager;
 	}
-	public void setManagerId(int managerId) {
-		this.managerId = managerId;
+	public void setManager(String manager) {
+		this.manager = manager;
 	}
-	public int getVerifierId() {
-		return verifierId;
+	public String getVerifier() {
+		return verifier;
 	}
-	public void setVerifierId(int verifierId) {
-		this.verifierId = verifierId;
+	public void setVerifier(String verifier) {
+		this.verifier = verifier;
 	}
-	public int getDeployerId() {
-		return deployerId;
+	public String getDeployer() {
+		return deployer;
 	}
-	public void setDeployerId(int deployerId) {
-		this.deployerId = deployerId;
+	public void setDeployer(String deployer) {
+		this.deployer = deployer;
 	}
 	public int getState() {
 		return state;
@@ -83,5 +85,4 @@ public class Publish {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-	
 }

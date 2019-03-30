@@ -122,6 +122,7 @@ public class UserService {
 			User user = userDao.selectUserByNameAndPwd(userName,passWord);
 			if (user == null) {
 				msg.put("error", "登录失败");
+				return msg;
 			}
 			msg.put("success", "登录成功");
 			msg.put("user", user);
