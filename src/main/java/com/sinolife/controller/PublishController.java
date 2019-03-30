@@ -44,7 +44,7 @@ public class PublishController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(path = {"/publish","/"}, method = {RequestMethod.GET})
+	@RequestMapping(path = {"/publish"}, method = {RequestMethod.GET})
     @ResponseBody
     public String index(@RequestParam(value = "currentpage",defaultValue="1") int currentpage,
 						@RequestParam(value = "pagesize",defaultValue="10") int pagesize) {
@@ -83,9 +83,9 @@ public class PublishController {
 	 */
 	@RequestMapping(path = { "/uploadPublish" }, method = {RequestMethod.POST })
 	@ResponseBody
-	public String uploadExcel(@RequestParam("file") MultipartFile excelFile) {
+	public String uploadExcel(@RequestParam("file") MultipartFile excelFile,@RequestParam("fileName") String fileName) {
 		try {
-			String fileUrl = publishService.saveFile(excelFile);
+			String fileUrl = publishService.saveFile(excelFile,fileName);
 			if (fileUrl == null) {
 				return JSONUtil.getJSONString(1,"上传失败");
 			}
