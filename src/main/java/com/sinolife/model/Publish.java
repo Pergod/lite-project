@@ -1,6 +1,7 @@
 package com.sinolife.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +26,14 @@ public class Publish {
 	private int state;
 	private Date createdDate;
 	private Date updatedDate;
+	//排期下需求
+	private List<Requirement> requirements;
+	public List<Requirement> getRequirements() {
+		return requirements;
+	}
+	public void setRequirements(List<Requirement> requirements) {
+		this.requirements = requirements;
+	}
 	public int getId() {
 		return id;
 	}

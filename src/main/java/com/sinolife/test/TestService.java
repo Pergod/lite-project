@@ -9,24 +9,17 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sinolife.Application;
-import com.sinolife.dao.ProjectChangesDao;
-import com.sinolife.dao.PublishDao;
-import com.sinolife.model.PageBean;
-import com.sinolife.model.ProjectChange;
-import com.sinolife.model.Publish;
-import com.sinolife.service.PublishService;
-
+import com.sinolife.dao.RequirementDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class TestService {
-	
+
 	@Autowired
-	private PublishService publishService;
-	
-	@Autowired
-	private PublishDao publishDao;
-	
-	@Autowired
-	ProjectChangesDao projectChangesDao;
+	RequirementDao requirementDao;
+
+	@Test
+	public void test01() {
+		requirementDao.selectRequirementStateCount(1,1);
+	}
 }

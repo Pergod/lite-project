@@ -33,11 +33,8 @@ public class PublishController {
 
 	/**
 	 * 查询排期列表
-	 * 
-	 * @param currentpage
-	 *            当前页
-	 * @param pagesize
-	 *            页面显示数
+	 * @param currentpage 当前页
+	 * @param pagesize  页面显示数
 	 * @return
 	 */
 	@RequestMapping(path = { "/publish" }, method = { RequestMethod.GET })

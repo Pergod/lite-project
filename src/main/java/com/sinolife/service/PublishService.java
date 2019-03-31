@@ -3,6 +3,7 @@ package com.sinolife.service;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sinolife.dao.ProjectChangesDao;
 import com.sinolife.dao.PublishDao;
+import com.sinolife.dao.RequirementDao;
 import com.sinolife.model.PageBean;
 import com.sinolife.model.Publish;
+import com.sinolife.model.PublishDTO;
+import com.sinolife.model.Requirement;
 import com.sinolife.util.FileUtil;
+import com.sinolife.util.StateConst;
 
 @Service
 public class PublishService {
@@ -25,20 +29,50 @@ public class PublishService {
 
 	@Autowired
 	private PublishDao publishDao;
-
+	
 	@Autowired
-	ProjectChangesDao projectChangesDao;
+	private RequirementDao requirementDao;
 
-	public int addPublish(Publish publish) {
-		return publishDao.insertPublish(publish);
+	public Map<String, Object> addPublish(Publish publish) {
+		Map<String, Object> msg = new HashMap<String,Object>();
+		try {
+			publishDao.insertPublish(publish);
+			msg.put("success", "插入数据成功");
+		} catch (Exception e) {
+			logger.error(e);
+			msg.put("error", "插入排期失败");
+		}
+		return msg;
 	}
 
 	@Transactional(readOnly = true)
 	public Map<String, Object> getPublishOffset(int startIndex, int pageSize) {
 		Map<String, Object> msg = new HashMap<String,Object>();
 		PageBean pageBean = new PageBean();
+		List<PublishDTO> results = new ArrayList<PublishDTO>();
 		List<Publish> publishs = publishDao.selectPublishOffset((startIndex - 1) * pageSize, pageSize);
-		pageBean.setList(publishs);
+		for (Publish publish : publishs) {
+			//获取排期内所有需求状态
+			int publishId = publish.getId();
+			int all = requirementDao.selectAllRequirement(publishId)==null?0:requirementDao.selectAllRequirement(publishId).size();
+			int unkown = requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN).size();
+			int approving = requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING).size();
+			int developing = requirementDao.selectRequirementStateCount(publishId, StateConst.DEVELOPING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.DEVELOPING).size();
+			int in_testing = requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING).size();
+			int out_testing = requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING).size();
+			int finished = requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED)==null?0: requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED).size();
+			PublishDTO publishDTO = new PublishDTO();
+			publishDTO.setPublish(publish);
+			publishDTO.setAll(all);
+			publishDTO.setUnkown(unkown);
+			publishDTO.setApproving(approving);
+			publishDTO.setDeveloping(developing);
+			publishDTO.setIn_testing(in_testing);
+			publishDTO.setOut_testing(out_testing);
+			publishDTO.setFinished(finished);
+			results.add(publishDTO);
+		}
+		pageBean.setList(results);
 		pageBean.setCurrentpage(startIndex);
 		pageBean.setPagesize(pageSize);
 		int totalRecord = publishs.size();
