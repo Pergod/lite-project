@@ -20,7 +20,7 @@ public class Requirement {
 	private int manpower;
 	private int workDay;
 	//是否需要代码评审
-	private boolean needReview;
+	private boolean needReview = false;
 	public boolean isNeedReview() {
 		return needReview;
 	}
@@ -40,7 +40,7 @@ public class Requirement {
 	 * 5:已移交测试
 	 * 6:已完成
 	 */
-	private int state;
+	private int state=1;
 	
 	public String getCreatedUser() {
 		return createdUser;

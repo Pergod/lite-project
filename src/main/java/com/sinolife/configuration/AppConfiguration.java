@@ -14,7 +14,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(passportInterceptor).addPathPatterns("/update*");
+		registry.addInterceptor(passportInterceptor).addPathPatterns("/update*").addPathPatterns("/upload*");
 		super.addInterceptors(registry);
 	}
 }

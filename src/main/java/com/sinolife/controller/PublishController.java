@@ -93,17 +93,18 @@ public class PublishController {
 	@ResponseBody
 	public String uploadExcel(@RequestParam("file") MultipartFile excelFile,
 			@RequestParam("fileName") String fileName) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			String fileUrl = publishService.saveFile(excelFile, fileName);
-			if (fileUrl == null) {
-				return JSONUtil.getJSONString(1, "上传失败");
+			map = publishService.saveFile(excelFile, fileName);
+			if (map.containsKey("success")) {
+				logger.info(JSONUtil.getJSONString(0, map));
+				return JSONUtil.getJSONString(0, map);
+			} else {
+				return JSONUtil.getJSONString(1, map);
 			}
-			logger.info("fileUrl=" + fileUrl);
-			// 解析excel文件-- 事务操作
-			return JSONUtil.getJSONString(0, fileUrl);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return JSONUtil.getJSONString(1, "上传失败");
+			logger.error(e);
+			return JSONUtil.getJSONString(1, "上传异常");
 		}
 	}
 }

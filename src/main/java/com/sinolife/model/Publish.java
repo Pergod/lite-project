@@ -22,7 +22,7 @@ public class Publish {
 	private String verifier;
 	//部署人员
 	private String deployer;
-	private int progress;
+	private int progress = 1;
 	private String createdUser;
 	private String updatedUser;
 	private Date createdDate;
