@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.sinolife.model.Requirement;
 
@@ -24,4 +25,7 @@ public interface RequirementDao {
 
 	@Select({ "select ",SELECT_FIELDS," from ", TABLE_NAME, " where publish_id=#{publishId} and state=#{state}" })
 	List<Requirement> selectRequirementStateCount(@Param("publishId")int publishId,@Param("state")int state);
+	
+	@Update({"update ", TABLE_NAME, " set jira_no=#{jiraNo},business_id=#{businessId},jira_desc=#{jiraDesc}, state=#{state},developer=#{developer},reporter=#{reporter},tester=#{tester},reporter=#{reporter},manpower=#{manpower},work_day=#{workDay},updated_date=#{updatedDate},updated_user=#{updatedUser} where id=#{id}"})
+    void updateRequirement(Requirement requirement);
 }

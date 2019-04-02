@@ -27,4 +27,7 @@ public interface UserDao {
 	//更新微信号
     @Update({"update ", TABLE_NAME, " set wx_nick_name=#{wxNickName} where user_name=#{userName}"})
 	public void insertWxNickName(@Param("wxNickName") String wxNickName,@Param("userName") String userName);
+    
+    @Select({"select ",SELECT_FIELDS,"from",TABLE_NAME," where id=#{id}"})
+	public User selectUserById(@Param("id") String id);
 }

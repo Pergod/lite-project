@@ -2,15 +2,17 @@ package com.sinolife.model;
 
 public class PublishDTO{
 	/**
-	 * 需求状态
-	 * 0:未分配
-	 * 1:审批中
-	 * 2:开发中
-	 * 3:内测中
-	 * 4:已移交测试
-	 * 5:已完成
+	 * 版本下需求状态
+	 * 1:未分配
+	 * 2:审批中
+	 * 3:开发中
+	 * 4:内测中
+	 * 5:已移交测试
+	 * 6:已完成
 	 */
 	private Publish publish;
+	//版本进度
+	private Progress progress;
 	private int all;
 	private int unkown;
 	private int approving;
@@ -20,6 +22,12 @@ public class PublishDTO{
 	private int finished;
 	
 	
+	public Progress getProgress() {
+		return progress;
+	}
+	public void setProgress(Progress progress) {
+		this.progress = progress;
+	}
 	public Publish getPublish() {
 		return publish;
 	}

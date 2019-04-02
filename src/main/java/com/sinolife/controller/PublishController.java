@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sinolife.model.HostHolder;
 import com.sinolife.service.PublishService;
 import com.sinolife.util.JSONUtil;
 
@@ -30,6 +31,9 @@ public class PublishController {
 
 	@Autowired
 	private PublishService publishService;
+	
+	@Autowired
+	HostHolder hostHolder;
 
 	/**
 	 * 查询排期列表
@@ -67,9 +71,10 @@ public class PublishController {
 		String manager = request.getParameter("manager");
 		String verifier = request.getParameter("verifier");
 		String deployer = request.getParameter("deployer");
-		String state = request.getParameter("state");
+		String progress = request.getParameter("progress");
 		String attribute = request.getParameter("attribute");
-		map = publishService.UpdatePublish(id,attribute,publishDate,manager,verifier,deployer,state);
+		String updateUser = hostHolder.getUser().getUserName();
+		map = publishService.UpdatePublish(id,attribute,publishDate,manager,verifier,deployer,progress,updateUser);
 		if (map.containsKey("success")) {
 			logger.info(JSONUtil.getJSONString(0, map));
 			return JSONUtil.getJSONString(0, map);

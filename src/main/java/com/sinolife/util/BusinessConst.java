@@ -6,18 +6,18 @@ package com.sinolife.util;
  *
  */
 public class BusinessConst {
-	// 0:寿险
-	public static final int SX = 0;
-	// 1:产险
-	public static final int CX = 1;
-	// 2:团险
-	public static final int TX = 2;
-	// 3:财务
-	public static final int CW = 3;
-	// 4:监管
-	public static final int JG = 4;
-	// 5:规则
-	public static final int GZ = 5;
-	// 6:电商
-	public static final int DS = 6;
+	// 1:寿险
+	public static final int SX = 1;
+	// 2:产险
+	public static final int CX = 2;
+	// 3:团险
+	public static final int TX = 3;
+	// 4:财务
+	public static final int CW = 4;
+	// 5:监管
+	public static final int JG = 5;
+	// 6:规则
+	public static final int GZ = 6;
+	// 7:电商
+	public static final int DS = 7;
 }

@@ -154,4 +154,25 @@ public class UserService {
 		}
 		return msg;
 	}
+	
+	
+	/**
+	 * 通过id获取用户
+	 * @param id
+	 * @return
+	 */
+	public Map<String, Object> getUserById(String id){
+		Map<String, Object> map = new HashMap<String,Object>();
+		try {
+			User user = userDao.selectUserById(id);
+			if (user != null) {
+				map.put("success", user);
+			}
+			return map;
+		} catch (Exception e) {
+			logger.error(e);
+			map.put("error", "无法找到该用户");
+			return map;
+		}
+	}
 }

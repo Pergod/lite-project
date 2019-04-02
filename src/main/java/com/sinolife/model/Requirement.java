@@ -19,19 +19,41 @@ public class Requirement {
 	private String belongDepartment;
 	private int manpower;
 	private int workDay;
-	/**
-	 * 需求状态
-	 * 0:未分配
-	 * 1:审批中
-	 * 2:开发中
-	 * 3:内测中
-	 * 4:已移交测试
-	 * 5:已完成
-	 */
-	private int state;
+	//是否需要代码评审
+	private boolean needReview;
+	public boolean isNeedReview() {
+		return needReview;
+	}
+	public void setNeedReview(boolean needReview) {
+		this.needReview = needReview;
+	}
+	private String createdUser;
+	private String updatedUser;
 	private Date createdDate;
 	private Date updatedDate;
+	/**
+	 * 需求状态
+	 * 1:未分配
+	 * 2:审批中
+	 * 3:开发中
+	 * 4:内测中
+	 * 5:已移交测试
+	 * 6:已完成
+	 */
+	private int state;
 	
+	public String getCreatedUser() {
+		return createdUser;
+	}
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
+	public String getUpdatedUser() {
+		return updatedUser;
+	}
+	public void setUpdatedUser(String updatedUser) {
+		this.updatedUser = updatedUser;
+	}
 	public int getId() {
 		return id;
 	}

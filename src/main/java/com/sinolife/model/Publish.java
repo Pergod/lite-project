@@ -16,18 +16,31 @@ public class Publish {
 	private int attribute;
 	@NotNull
 	private String publishDate;
-	
 	//管理人员
 	private String manager;
 	//验证人员
 	private String verifier;
 	//部署人员
 	private String deployer;
-	private int state;
+	private int progress;
+	private String createdUser;
+	private String updatedUser;
 	private Date createdDate;
 	private Date updatedDate;
 	//排期下需求
 	private List<Requirement> requirements;
+	public String getCreatedUser() {
+		return createdUser;
+	}
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
+	public String getUpdatedUser() {
+		return updatedUser;
+	}
+	public void setUpdatedUser(String updatedUser) {
+		this.updatedUser = updatedUser;
+	}
 	public List<Requirement> getRequirements() {
 		return requirements;
 	}
@@ -76,11 +89,11 @@ public class Publish {
 	public void setDeployer(String deployer) {
 		this.deployer = deployer;
 	}
-	public int getState() {
-		return state;
+	public int getProgress() {
+		return progress;
 	}
-	public void setState(int state) {
-		this.state = state;
+	public void setProgress(int progress) {
+		this.progress = progress;
 	}
 	public Date getCreatedDate() {
 		return createdDate;

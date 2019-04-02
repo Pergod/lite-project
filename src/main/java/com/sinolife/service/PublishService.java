@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sinolife.dao.ProgessDao;
 import com.sinolife.dao.PublishDao;
 import com.sinolife.dao.RequirementDao;
 import com.sinolife.model.PageBean;
+import com.sinolife.model.Progress;
 import com.sinolife.model.Publish;
 import com.sinolife.model.PublishDTO;
-import com.sinolife.model.Requirement;
 import com.sinolife.util.FileUtil;
 import com.sinolife.util.StateConst;
 
@@ -32,6 +34,9 @@ public class PublishService {
 	
 	@Autowired
 	private RequirementDao requirementDao;
+	
+	@Autowired
+	private ProgessDao progessDao;
 
 	public Map<String, Object> addPublish(Publish publish) {
 		Map<String, Object> msg = new HashMap<String,Object>();
@@ -54,6 +59,8 @@ public class PublishService {
 		for (Publish publish : publishs) {
 			//获取排期内所有需求状态
 			int publishId = publish.getId();
+			//查看当前版本进度
+			int progressId = publish.getProgress();
 			int all = requirementDao.selectAllRequirement(publishId)==null?0:requirementDao.selectAllRequirement(publishId).size();
 			int unkown = requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN).size();
 			int approving = requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING).size();
@@ -61,8 +68,11 @@ public class PublishService {
 			int in_testing = requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING).size();
 			int out_testing = requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING)==null?0:requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING).size();
 			int finished = requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED)==null?0: requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED).size();
+			Progress progress = progessDao.selectProgressById(progressId);
+			
 			PublishDTO publishDTO = new PublishDTO();
 			publishDTO.setPublish(publish);
+			publishDTO.setProgress(progress);
 			publishDTO.setAll(all);
 			publishDTO.setUnkown(unkown);
 			publishDTO.setApproving(approving);
@@ -87,7 +97,7 @@ public class PublishService {
 	}
 	
 	@Transactional
-	public Map<String, Object> UpdatePublish(String id, String attribute, String publishDate, String manager, String verifier, String deployer, String state) {
+	public Map<String, Object> UpdatePublish(String id, String attribute, String publishDate, String manager, String verifier, String deployer, String progress,String updatedUser) {
 		Map<String, Object> msg = new HashMap<String,Object>();
 		try {
 			Publish publish = new Publish();
@@ -97,7 +107,9 @@ public class PublishService {
 			publish.setManager(manager);
 			publish.setVerifier(verifier);
 			publish.setDeployer(deployer);
-			publish.setState(Integer.valueOf(state));
+			publish.setProgress(Integer.valueOf(progress));
+			publish.setUpdatedUser(updatedUser);
+			publish.setUpdatedDate(new Date());
 			publishDao.updatePublish(publish);
 			msg.put("success", "更新成功");
 		} catch (Exception e) {
