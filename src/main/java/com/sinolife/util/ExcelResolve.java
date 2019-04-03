@@ -1,8 +1,6 @@
 package com.sinolife.util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -29,44 +24,19 @@ import net.sf.json.JSONObject;
 @Component
 public class ExcelResolve {
 
-	public static final String XLSX = ".xlsx";
-	public static final String XLS = ".xls";
-
 	/**
-	 * 获取Excel文件（.xls和.xlsx都支持） 解析excle后的Json数据
+	 * 解析Excel文件
 	 */
 	public static List<Map<String, Object>> readExcel(File file) throws Exception {
-		int res = checkFile(file);
-		if (res == 0) {
-			System.out.println("File not found");
-		} else if (res == 1) {
-			return readXLSX(file);
-		} else if (res == 2) {
-			return readXLS(file);
+		String fileName = file.getName();
+		String extName = FileUtil.getExtName(fileName);
+		Workbook book = null;
+		if (FileUtil.isExcel(extName)) {
+			book = new XSSFWorkbook(file);
+		}else {
+			return null;
 		}
-		return null;
-	}
-
-	/**
-	 * 判断File文件的类型 file 传入的文件 0-文件为空，1-XLSX文件，2-XLS文件，3-其他文件
-	 */
-	public static int checkFile(File file) {
-		if (file == null) {
-			return 0;
-		}
-		String flieName = file.getName();
-		if (flieName.endsWith(XLSX)) {
-			return 1;
-		}
-		if (flieName.endsWith(XLS)) {
-			return 2;
-		}
-		return 3;
-	}
-
-	// 读取XLSX文件
-	public static List<Map<String, Object>> readXLSX(File file) throws InvalidFormatException, IOException {
-		Workbook book = new XSSFWorkbook(file);
+		//获取Excel下Sheets数目
 		int numberOfSheets = book.getNumberOfSheets();
 		List<Map<String, Object>> businesses = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < numberOfSheets; i++) {
@@ -85,41 +55,6 @@ public class ExcelResolve {
 				temp.put("jira_desc", (String)json.get("主题"));
 				temp.put("jira_type", (String)json.get("需求类型"));
 				temp.put("state", (String)json.get("需求状态"));
-				temp.put("state", (String)json.get("需求状态"));
-				temp.put("modification", (String)json.get("功能点"));
-				temp.put("developer", (String)json.get("开发人员"));
-				temp.put("need_review", (String)json.get("是否需要代码评审"));
-				temp.put("reporter", (String)json.get("需求提出人"));
-				temp.put("tester", (String)json.get("测试人"));
-				requirements.add(temp);
-			}
-			map.put(shetName, requirements);
-			businesses.add(map);
-		}
-		return businesses;
-	}
-
-	// 读取XLS文件
-	public static List<Map<String, Object>> readXLS(File file) throws FileNotFoundException, IOException {
-		POIFSFileSystem poifsFileSystem = new POIFSFileSystem(new FileInputStream(file));
-		Workbook book = new HSSFWorkbook(poifsFileSystem);
-		int numberOfSheets = book.getNumberOfSheets();
-		List<Map<String, Object>> businesses = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < numberOfSheets; i++) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			Sheet sheet = book.getSheetAt(i);
-			String shetName = book.getSheetName(i);
-			//获取条线名
-			map.put("business", shetName);
-			List<Map<String, String>> requirements = new ArrayList<Map<String, String>>();
-			//循环获取每个条线的需求详情
-			JSONArray jsonArray = read(sheet, book);
-			for(int j=0;j<jsonArray.size();j++){
-				JSONObject json = jsonArray.getJSONObject(j);
-				Map<String, String> temp = new HashMap<String, String>();
-				temp.put("jira_no",(String)json.get("需求号"));
-				temp.put("jira_desc", (String)json.get("主题"));
-				temp.put("jira_type", (String)json.get("需求类型"));
 				temp.put("state", (String)json.get("需求状态"));
 				temp.put("modification", (String)json.get("功能点"));
 				temp.put("developer", (String)json.get("开发人员"));
@@ -230,22 +165,22 @@ public class ExcelResolve {
 		return "";
 	}
 
-	public static void main(String[] args) {
-		File f1 = new File("E:/11.xlsx");
-		ExcelResolve excelResolve = new ExcelResolve();
-		try {
-			List<Map<String, Object>> list = excelResolve.readExcel(f1);
-			for (Map<String, Object> map : list) {
-				System.out.println(map.get("business"));
-				List<Map<String, String>> req = (List<Map<String, String>>) map.get(map.get("business"));
-				for (Map<String, String> map2 : req) {
-					System.out.println(map2.get("jira_no"));
-				}
-			}
-//			System.out.println(excelResolve.readExcel(f1));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		File f1 = new File("E:/11.xlsx");
+//		ExcelResolve excelResolve = new ExcelResolve();
+//		try {
+//			List<Map<String, Object>> list = excelResolve.readExcel(f1);
+//			for (Map<String, Object> map : list) {
+//				System.out.println(map.get("business"));
+//				List<Map<String, String>> req = (List<Map<String, String>>) map.get(map.get("business"));
+//				for (Map<String, String> map2 : req) {
+//					System.out.println(map2.get("jira_no"));
+//				}
+//			}
+////			System.out.println(excelResolve.readExcel(f1));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

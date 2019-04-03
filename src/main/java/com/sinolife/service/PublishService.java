@@ -150,7 +150,7 @@ public class PublishService {
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> saveFile(MultipartFile file, String fileName) throws Exception {
-		String extName = getExtName(file.getOriginalFilename());
+		String extName = FileUtil.getExtName(file.getOriginalFilename());
 		Map<String, Object> msg = new HashMap<String, Object>();
 		if (!FileUtil.isExcel(extName)) {
 			msg.put("error", "上传的文件非excel格式");
@@ -203,7 +203,7 @@ public class PublishService {
 					msg.put("error", "需求状态填写错误");
 					return msg;
 				}
-				// 修改点
+				// 修改点 -- 暂未用到
 				String modification = requirementMap.get("modification");
 				// 开发人员
 				String developer = requirementMap.get("developer");
@@ -239,19 +239,6 @@ public class PublishService {
 		return msg;
 	}
 
-	/**
-	 * 获取文件后缀名
-	 * 
-	 * @param originFileName
-	 * @return
-	 */
-	public String getExtName(String originFileName) {
-		int dotPos = originFileName.lastIndexOf(".");
-		if (dotPos < 0) {
-			return null;
-		}
-		return originFileName.substring(dotPos + 1);
-	}
 
 //	public static void main(String[] args) {
 //		String fileName = "2018-09-12-常规.xls";

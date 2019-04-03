@@ -12,7 +12,7 @@ import com.sinolife.model.User;
 @Mapper
 public interface UserDao {
 	String TABLE_NAME ="user";
-	String SELECT_FIELDS="user_name,email,wx_nick_name,age,gender,center,department,spare_day,role";
+	String SELECT_FIELDS="user_name,password,email,wx_nick_name,age,gender,center,department,spare_day,role";
 	String INSERT_FIELDS = "user_name, password,email,gender,center,department,role,created_date,updated_date";
 	
 	@Insert({"insert into", TABLE_NAME, "(", INSERT_FIELDS,  ") values (#{userName},#{password},#{email},#{gender},#{center},#{department},#{role},#{createdDate},#{updatedDate})"})

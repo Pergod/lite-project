@@ -14,6 +14,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		//涉及更新上传操作需拦截并记录操作用户
 		registry.addInterceptor(passportInterceptor).addPathPatterns("/update*").addPathPatterns("/upload*");
 		super.addInterceptors(registry);
 	}
