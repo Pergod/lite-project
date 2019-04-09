@@ -12,7 +12,11 @@ import com.sinolife.model.Publish;
 import com.sinolife.model.Requirement;
 import com.sinolife.model.RequirementDTO;
 
-
+/**
+ * 多线程callable
+ * @author Flystar
+ *
+ */
 public class RequirementCallable implements Callable<List<RequirementDTO>> {
 	
 	private RequirementDao requirementDao;

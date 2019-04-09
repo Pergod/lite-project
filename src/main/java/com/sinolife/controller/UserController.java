@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import com.sinolife.util.JSONUtil;
  */
 @Controller
 public class UserController {
-	private static final Logger logger = Logger.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserService userService;
@@ -72,7 +73,7 @@ public class UserController {
 				return JSONUtil.getJSONString(1, map);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			return JSONUtil.getJSONString(1, "绑定异常");
 		}
     }
@@ -99,7 +100,7 @@ public class UserController {
 				return JSONUtil.getJSONString(1, map);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			return JSONUtil.getJSONString(1, "系统异常");
 		}
     }

@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ import com.sinolife.util.StateConst;
 
 @Service
 public class PublishService {
-	private static final Logger logger = Logger.getLogger(PublishService.class);
+	private static final Logger logger = LoggerFactory.getLogger(PublishService.class);
 
 	@Autowired
 	private PublishDao publishDao;
@@ -66,7 +67,7 @@ public class PublishService {
 			publishDao.insertPublish(publish);
 			msg.put("success", "插入数据成功");
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			msg.put("error", "插入排期失败");
 		}
 		return msg;
@@ -143,7 +144,7 @@ public class PublishService {
 			publishDao.updatePublish(publish);
 			msg.put("success", "更新成功");
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			msg.put("succee", "更新失败");
 		}
 		return msg;
@@ -238,7 +239,6 @@ public class PublishService {
 				requirementDao.insertRequirement(requirement);
 			}
 		}
-		logger.info(ExcelResolve.readExcel(new File(FileUtil.EXCEL_DIR + fileName)));
 		msg.put("success", FileUtil.DOMAIN + "excel?name=" + fileName);
 		return msg;
 	}

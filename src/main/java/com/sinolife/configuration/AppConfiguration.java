@@ -9,6 +9,7 @@ import com.sinolife.interceptor.PassportInterceptor;
 
 @Component
 public class AppConfiguration extends WebMvcConfigurerAdapter{
+	
 	@Autowired
 	private PassportInterceptor passportInterceptor;
 	

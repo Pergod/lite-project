@@ -6,7 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ import com.sinolife.util.JSONUtil;
  */
 @Controller
 public class PublishController {
-	private static final Logger logger = Logger.getLogger(PublishController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PublishController.class);
 
 	@Autowired
 	private PublishService publishService;
@@ -103,7 +104,7 @@ public class PublishController {
 				return JSONUtil.getJSONString(1, map);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			return JSONUtil.getJSONString(1, "上传异常");
 		}
 	}

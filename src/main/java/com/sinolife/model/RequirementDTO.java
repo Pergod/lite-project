@@ -1,6 +1,13 @@
 package com.sinolife.model;
 
-public class RequirementDTO {
+import java.io.Serializable;
+
+public class RequirementDTO implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Requirement requirement;
 	private Business business;
 	private Publish publish ;

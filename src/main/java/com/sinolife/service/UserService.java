@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sinolife.controller.UserController;
 import com.sinolife.dao.UserDao;
 import com.sinolife.model.User;
 
@@ -19,7 +21,8 @@ import com.sinolife.model.User;
  */
 @Service
 public class UserService {
-	private static final Logger logger = Logger.getLogger(UserService.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	
 
 	@Autowired
 	private UserDao userDao;
@@ -81,7 +84,7 @@ public class UserService {
 			msg.put("user", user);
 			return msg;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			msg.put("error", "注册异常");
 			return msg;
 		}
@@ -104,7 +107,7 @@ public class UserService {
 			msg.put("user", user);
 			return msg;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			msg.put("error", "微信登录异常");
 			return msg;
 		}
@@ -130,7 +133,7 @@ public class UserService {
 			msg.put("user", user);
 			return msg;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			msg.put("error", "登录异常");
 			return msg;
 		}
@@ -151,7 +154,7 @@ public class UserService {
 			userDao.insertWxNickName(wxNickName, userName);
 			msg.put("success", "绑定成功");
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			msg.put("error", "绑定异常");
 		}
 		return msg;
@@ -172,7 +175,7 @@ public class UserService {
 			}
 			return map;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			map.put("error", "无法找到该用户");
 			return map;
 		}

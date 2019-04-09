@@ -1,5 +1,6 @@
 package com.sinolife.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,13 @@ import javax.validation.constraints.NotNull;
  * @author Flystar
  *
  */
-public class Publish {
+public class Publish implements Serializable{
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String publishDesc;
 	private int attribute;

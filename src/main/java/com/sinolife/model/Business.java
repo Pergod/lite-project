@@ -1,12 +1,20 @@
 package com.sinolife.model;
 
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 条线
  * @author Flystar
  *
  */
-public class Business {
+public class Business implements Serializable{
+	
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String suiteName;
 	private String businessDesc;

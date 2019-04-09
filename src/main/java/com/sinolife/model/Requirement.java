@@ -1,12 +1,19 @@
 package com.sinolife.model;
 
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 需求
  * @author Flystar
  *
  */
-public class Requirement {
+public class Requirement implements Serializable{
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private int publishId;
 	private int businessId;
