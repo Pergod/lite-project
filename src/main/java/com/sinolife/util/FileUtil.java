@@ -5,6 +5,10 @@ public class FileUtil {
 	public static final String EXCEL_DIR ="E:/upload/";
 	public static final String DOMAIN="http://127.0.0.1:8080/";
 	
+	
+//	public static final String EXCEL_DIR ="/lucify/tomcat/excels/";
+//	public static final String DOMAIN="https://luxi81.com/";
+	
 	/**
 	 * 检查是否是Excel文件
 	 * @param extName

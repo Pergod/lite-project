@@ -124,6 +124,8 @@ public class UserService {
 				msg.put("error", "登录失败");
 				return msg;
 			}
+			user.setUserName(userName);
+			user.setPassword(passWord);
 			msg.put("success", "登录成功");
 			msg.put("user", user);
 			return msg;

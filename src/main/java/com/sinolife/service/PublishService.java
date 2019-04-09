@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,18 +85,18 @@ public class PublishService {
 			int progressId = publish.getProgress();
 			int all = requirementDao.selectAllRequirement(publishId) == null ? 0
 					: requirementDao.selectAllRequirement(publishId).size();
-			int unkown = requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN) == null ? 0
-					: requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN).size();
-			int approving = requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING) == null ? 0
-					: requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING).size();
-			int developing = requirementDao.selectRequirementStateCount(publishId, StateConst.DEVELOPING) == null ? 0
-					: requirementDao.selectRequirementStateCount(publishId, StateConst.DEVELOPING).size();
-			int in_testing = requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING) == null ? 0
-					: requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING).size();
-			int out_testing = requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING) == null ? 0
-					: requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING).size();
-			int finished = requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED) == null ? 0
-					: requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED).size();
+			int unkown = requirementDao.selectRequirementState(publishId, StateConst.UNKOWN) == null ? 0
+					: requirementDao.selectRequirementState(publishId, StateConst.UNKOWN).size();
+			int approving = requirementDao.selectRequirementState(publishId, StateConst.APPROVING) == null ? 0
+					: requirementDao.selectRequirementState(publishId, StateConst.APPROVING).size();
+			int developing = requirementDao.selectRequirementState(publishId, StateConst.DEVELOPING) == null ? 0
+					: requirementDao.selectRequirementState(publishId, StateConst.DEVELOPING).size();
+			int in_testing = requirementDao.selectRequirementState(publishId, StateConst.IN_TESTING) == null ? 0
+					: requirementDao.selectRequirementState(publishId, StateConst.IN_TESTING).size();
+			int out_testing = requirementDao.selectRequirementState(publishId, StateConst.OUT_TESTING) == null ? 0
+					: requirementDao.selectRequirementState(publishId, StateConst.OUT_TESTING).size();
+			int finished = requirementDao.selectRequirementState(publishId, StateConst.FINISHED) == null ? 0
+					: requirementDao.selectRequirementState(publishId, StateConst.FINISHED).size();
 			Progress progress = progessDao.selectProgressById(progressId);
 
 			PublishDTO publishDTO = new PublishDTO();
@@ -149,6 +150,7 @@ public class PublishService {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public Map<String, Object> saveFile(MultipartFile file, String fileName) throws Exception {
 		String extName = FileUtil.getExtName(file.getOriginalFilename());
 		Map<String, Object> msg = new HashMap<String, Object>();
@@ -198,15 +200,17 @@ public class PublishService {
 				String jiraType = requirementMap.get("jira_type");
 				// 需求状态
 				String stateDesc = requirementMap.get("state");
-				State state = stateDao.selectStateByDesc(stateDesc);
-				if (state == null) {
-					msg.put("error", "需求状态填写错误");
-					return msg;
+				State state = null;
+				if (StringUtils.isNotBlank(stateDesc)) {
+					state = stateDao.selectStateByDesc(stateDesc);
 				}
 				// 修改点 -- 暂未用到
 				String modification = requirementMap.get("modification");
 				// 开发人员
 				String developer = requirementMap.get("developer");
+				if (developer != null) {
+					
+				}
 				// 是否需要代码评审
 				String need_review = requirementMap.get("need_review");
 				// 需求提出人
@@ -216,7 +220,7 @@ public class PublishService {
 				Requirement requirement = new Requirement();
 				requirement.setJiraNo(jiraNo);
 				requirement.setJiraDesc(jiraDesc);
-				requirement.setState(state.getId());
+				requirement.setState(state==null?1:state.getId());
 				requirement.setDeveloper(developer);
 				requirement.setReporter(reporter);
 				requirement.setTester(tester);

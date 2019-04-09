@@ -1,10 +1,10 @@
 package com.sinolife.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.FutureTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import com.sinolife.dao.BusinessDao;
 import com.sinolife.dao.PublishDao;
 import com.sinolife.dao.RequirementDao;
 import com.sinolife.model.Business;
-import com.sinolife.model.Publish;
 import com.sinolife.model.Requirement;
 import com.sinolife.model.RequirementDTO;
 import com.sinolife.util.StateConst;
@@ -23,104 +22,78 @@ import com.sinolife.util.StateConst;
 public class RequirementService {
 	private static final Logger logger = Logger.getLogger(RequirementService.class);
 
+//	ExecutorService executorService = Executors.newCachedThreadPool();
+
 	@Autowired
 	RequirementDao requirementDao;
-	
+
 	@Autowired
 	BusinessDao businessDao;
-	
+
 	@Autowired
 	PublishDao publishDao;
 
+	/**
+	 * 获取排期内需求状态详情
+	 * 
+	 * @param publishId
+	 * @return
+	 */
 	public Map<String, Object> getRequirementDetails(int publishId) {
 		Map<String, Object> msg = new HashMap<String, Object>();
 		try {
-			List<Requirement> allRequirements = requirementDao.selectAllRequirement(publishId);
-			List<RequirementDTO> all = new ArrayList<RequirementDTO>();
-			for (Requirement item : allRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				all.add(requirementDTO);
-			}
-			List<Requirement> unkownRequirements = requirementDao.selectRequirementStateCount(publishId, StateConst.UNKOWN);
-			List<RequirementDTO> unkown = new ArrayList<RequirementDTO>();
-			for (Requirement item : unkownRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				unkown.add(requirementDTO);
-			}
-			List<Requirement> approvingRequirements = requirementDao.selectRequirementStateCount(publishId, StateConst.APPROVING);
-			List<RequirementDTO> approving = new ArrayList<RequirementDTO>();
-			for (Requirement item : approvingRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				approving.add(requirementDTO);
-			}
-			List<Requirement> developingRequirements = requirementDao.selectRequirementStateCount(publishId, StateConst.DEVELOPING);
-			List<RequirementDTO> developing = new ArrayList<RequirementDTO>();
-			for (Requirement item : developingRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				developing.add(requirementDTO);
-			}
+			// 查询所有
+			RequirementCallable allCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, 0);
+			FutureTask<List<RequirementDTO>> allTask = new FutureTask<List<RequirementDTO>>(allCallable);
 			
-			List<Requirement> inTestingRequirements = requirementDao.selectRequirementStateCount(publishId, StateConst.IN_TESTING);
-			List<RequirementDTO> in_testing = new ArrayList<RequirementDTO>();
-			for (Requirement item : inTestingRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				in_testing.add(requirementDTO);
-			}
-			List<Requirement> outTestingRequirements = requirementDao.selectRequirementStateCount(publishId, StateConst.OUT_TESTING);
-			List<RequirementDTO> out_testing = new ArrayList<RequirementDTO>();
-			for (Requirement item : outTestingRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				out_testing.add(requirementDTO);
-			}
-			List<Requirement> finishedRequirements = requirementDao.selectRequirementStateCount(publishId, StateConst.FINISHED);
-			List<RequirementDTO> finished = new ArrayList<RequirementDTO>();
-			for (Requirement item : finishedRequirements) {
-				Business business = businessDao.selectBusinessById(item.getBusinessId());
-				Publish publish = publishDao.selectPublishById(item.getPublishId());
-				RequirementDTO requirementDTO = new RequirementDTO();
-				requirementDTO.setBusiness(business);
-				requirementDTO.setPublish(publish);
-				requirementDTO.setRequirement(item);
-				finished.add(requirementDTO);
-			}
+			new Thread(allTask).start();
+			// 查询未分配
+			RequirementCallable unkownCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, StateConst.UNKOWN);
+			FutureTask<List<RequirementDTO>> unkownTask = new FutureTask<List<RequirementDTO>>(unkownCallable);
+			
+			new Thread(unkownTask).start();
+			// 查询审批中
+			RequirementCallable approvingCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, StateConst.APPROVING);
+			FutureTask<List<RequirementDTO>> approvingTask = new FutureTask<List<RequirementDTO>>(approvingCallable);
+			
+			new Thread(approvingTask).start();
+			// 查询开发中
+			RequirementCallable developingCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, StateConst.DEVELOPING);
+			FutureTask<List<RequirementDTO>> developingTask = new FutureTask<List<RequirementDTO>>(developingCallable);
+			
+			new Thread(developingTask).start();
+			// 查询内测中
+			RequirementCallable inTestingCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, StateConst.IN_TESTING);
+			FutureTask<List<RequirementDTO>> inTestingTask = new FutureTask<List<RequirementDTO>>(inTestingCallable);
+			
+			new Thread(inTestingTask).start();
+			// 查询已移交测试
+			RequirementCallable outTestingCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, StateConst.OUT_TESTING);
+			FutureTask<List<RequirementDTO>> outTestingTask = new FutureTask<List<RequirementDTO>>(outTestingCallable);
+			
+			new Thread(outTestingTask).start();
+			// 查询完成
+			RequirementCallable finishedCallable = new RequirementCallable(requirementDao, businessDao, publishDao,
+					publishId, StateConst.FINISHED);
+			FutureTask<List<RequirementDTO>> finishedTask = new FutureTask<List<RequirementDTO>>(finishedCallable);
+			
+			new Thread(finishedTask).start();
+
 			msg.put("success", "获取成功");
-			msg.put("all", all);
-			msg.put("unkown", unkown);
-			msg.put("approving", approving);
-			msg.put("developing", developing);
-			msg.put("in_testing", in_testing);
-			msg.put("out_testing", out_testing);
-			msg.put("finished", finished);
+			msg.put("all", allTask.get());
+			msg.put("unkown", unkownTask.get());
+			msg.put("approving", approvingTask.get());
+			msg.put("developing", developingTask.get());
+			msg.put("in_testing", inTestingTask.get());
+			msg.put("out_testing", outTestingTask.get());
+			msg.put("finished", finishedTask.get());
+			return msg;
 		} catch (Exception e) {
 			logger.error(e);
 			msg.put("error", "获取需求详情异常");
@@ -128,9 +101,9 @@ public class RequirementService {
 		return msg;
 	}
 
-	public Map<String, Object> updateRequirement(
-			String id, String jiraNo, String jiraDesc, String developer,
-			String tester, String reporter, String businessDesc, String state,String manpower,String workDay,String updatedUser) {
+	public Map<String, Object> updateRequirement(String id, String jiraNo, String jiraDesc, String developer,
+			String tester, String reporter, String businessDesc, String state, String manpower, String workDay,
+			String updatedUser) {
 		Map<String, Object> msg = new HashMap<String, Object>();
 		try {
 			int requirementId = Integer.valueOf(id);
