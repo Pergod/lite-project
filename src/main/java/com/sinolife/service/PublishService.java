@@ -242,15 +242,4 @@ public class PublishService {
 		msg.put("success", FileUtil.DOMAIN + "excel?name=" + fileName);
 		return msg;
 	}
-
-
-//	public static void main(String[] args) {
-//		String fileName = "2018-09-12-常规.xls";
-//		fileName = fileName.substring(0, fileName.indexOf("."));
-//		System.out.println(fileName);
-//		fileName.substring(0, fileName.lastIndexOf("-"));
-//		System.out.println(fileName.substring(0, fileName.lastIndexOf("-")));
-//		fileName.substring(fileName.lastIndexOf("-"));
-//		System.out.println(fileName.substring(fileName.lastIndexOf("-") + 1));
-//	}
 }

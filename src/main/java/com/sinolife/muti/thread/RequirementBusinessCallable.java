@@ -1,4 +1,4 @@
-package com.sinolife.service;
+package com.sinolife.muti.thread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,34 +13,28 @@ import com.sinolife.model.Requirement;
 import com.sinolife.model.RequirementDTO;
 
 /**
- * 多线程callable
+ * 根据条线查询需求callable实现
  * @author Flystar
  *
  */
-public class RequirementCallable implements Callable<List<RequirementDTO>> {
-	
+public class RequirementBusinessCallable implements Callable<List<RequirementDTO>>{
 	private RequirementDao requirementDao;
 	private BusinessDao businessDao;
 	private PublishDao publishDao;
 	private int publishId;
-	private int state;
-
-	public RequirementCallable(RequirementDao requirementDao,BusinessDao businessDao,PublishDao publishDao,int publishId, int state) {
+	private int businessId;
+	
+	public RequirementBusinessCallable(RequirementDao requirementDao,BusinessDao businessDao,PublishDao publishDao,int publishId,int businessId) {
 		this.businessDao = businessDao;
 		this.publishDao = publishDao;
 		this.requirementDao = requirementDao;
 		this.publishId = publishId;
-		this.state = state;
+		this.businessId = businessId;
 	}
-
+	
 	@Override
 	public List<RequirementDTO> call() throws Exception {
-		List<Requirement> requirements = null;
-		if (state != 0) {
-			requirements = requirementDao.selectRequirementState(publishId, state);
-		} else {
-			requirements = requirementDao.selectAllRequirement(publishId);
-		}
+		List<Requirement> requirements = requirementDao.selectRequirementByBusiness(publishId,businessId);
 		List<RequirementDTO> results = new ArrayList<RequirementDTO>();
 		for (Requirement item : requirements) {
 			Business business = businessDao.selectBusinessById(item.getBusinessId());

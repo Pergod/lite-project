@@ -1,7 +1,7 @@
 package com.sinolife.util;
 
 /**
- * 条线常量
+ * 业务条线常量
  * @author Flystar
  *
  */
@@ -14,10 +14,10 @@ public class BusinessConst {
 	public static final int TX = 3;
 	// 4:财务
 	public static final int CW = 4;
-	// 5:监管
-	public static final int JG = 5;
+	// 5:电商
+	public static final int DS = 5;
 	// 6:规则
 	public static final int GZ = 6;
-	// 7:电商
-	public static final int DS = 7;
+	// 7:监管
+	public static final int JG = 7;
 }

@@ -24,5 +24,9 @@ public class RedisService {
 		return redisTemplate.opsForValue().get(key);
 	}
 	
+	public void remove(String key){
+		redisTemplate.delete(key);
+	}
+	
 
 }

@@ -164,23 +164,4 @@ public class ExcelResolve {
 		// 5. 错误 CELL_TYPE_ERROR
 		return "";
 	}
-
-//	public static void main(String[] args) {
-//		File f1 = new File("E:/11.xlsx");
-//		ExcelResolve excelResolve = new ExcelResolve();
-//		try {
-//			List<Map<String, Object>> list = excelResolve.readExcel(f1);
-//			for (Map<String, Object> map : list) {
-//				System.out.println(map.get("business"));
-//				List<Map<String, String>> req = (List<Map<String, String>>) map.get(map.get("business"));
-//				for (Map<String, String> map2 : req) {
-//					System.out.println(map2.get("jira_no"));
-//				}
-//			}
-////			System.out.println(excelResolve.readExcel(f1));
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
 }
