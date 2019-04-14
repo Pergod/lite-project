@@ -209,7 +209,6 @@ public class RequirementService {
 						businessDao, publishDao, publishId, BusinessConst.JG);
 				FutureTask<List<RequirementDTO>> jgRequirementTask = new FutureTask<>(jgRequirementCallable);
 				new Thread(jgRequirementTask).start();
-				msg.put("success", "获取成功");
 				msg.put("sx", sxRequirementTask.get());
 				msg.put("cx", cxRequirementTask.get());
 				msg.put("tx", txRequirementTask.get());

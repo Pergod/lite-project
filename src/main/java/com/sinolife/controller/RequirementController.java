@@ -114,105 +114,40 @@ public class RequirementController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private Map<String,Object> transferToPageData(Map<String, Object> beforeMap) {
 		Set<String> keys = beforeMap.keySet();
-		List<Object> list = new ArrayList<Object>();
+		List<Object> results = new ArrayList<Object>();
 		Map<String, Object> afterMap = new HashMap<String, Object>();
 		for (String key : keys) {
-			if (key.equalsIgnoreCase("sx")) {
-				Map<String, Object> sxMap = new HashMap<String, Object>();
-				List<Object> sxList = new ArrayList<Object>();
-				List<RequirementDTO> sxRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : sxRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo() + " " +item.getRequirement().getJiraDesc());
-					childrenMap.put("id", item.getRequirement().getId());
-					sxList.add(childrenMap);
-				}
-				sxMap.put("text", "寿险" + "(" + sxRequirements.size() + ")");
-				sxMap.put("children", sxList);
-				list.add(sxMap);
-			} else if (key.equalsIgnoreCase("cx")) {
-				Map<String, Object> cxMap = new HashMap<String, Object>();
-				List<Object> cxList = new ArrayList<Object>();
-				List<RequirementDTO> cxRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : cxRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo()+ " " +item.getRequirement().getJiraDesc());
-					childrenMap.put("id", item.getRequirement().getId());
-					cxList.add(childrenMap);
-				}
-				cxMap.put("text", "产险" + "(" + cxRequirements.size() + ")");
-				cxMap.put("children", cxList);
-				list.add(cxMap);
-			} else if (key.equalsIgnoreCase("tx")) {
-				Map<String, Object> txMap = new HashMap<String, Object>();
-				List<Object> txList = new ArrayList<Object>();
-				List<RequirementDTO> txRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : txRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo());
-					childrenMap.put("id", item.getRequirement().getId());
-					txList.add(childrenMap);
-				}
-				txMap.put("text", "团险" + "(" + txRequirements.size() + ")");
-				txMap.put("children", txList);
-				list.add(txMap);
-			} else if (key.equalsIgnoreCase("cw")) {
-				Map<String, Object> cwMap = new HashMap<String, Object>();
-				List<Object> cwList = new ArrayList<Object>();
-				List<RequirementDTO> cwRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : cwRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo());
-					childrenMap.put("id", item.getRequirement().getId());
-					cwList.add(childrenMap);
-				}
-				cwMap.put("text", "财务" + "(" + cwRequirements.size() + ")");
-				cwMap.put("children", cwList);
-				list.add(cwMap);
-			} else if (key.equalsIgnoreCase("ds")) {
-				Map<String, Object> dsMap = new HashMap<String, Object>();
-				List<Object> dsList = new ArrayList<Object>();
-				List<RequirementDTO> dsRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : dsRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo());
-					childrenMap.put("id", item.getRequirement().getId());
-					dsList.add(childrenMap);
-				}
-				dsMap.put("text", "电商" + "(" + dsRequirements.size() + ")");
-				dsMap.put("children", dsList);
-				list.add(dsMap);
-			} else if (key.equalsIgnoreCase("gz")) {
-				Map<String, Object> gzMap = new HashMap<String, Object>();
-				List<Object> gzList = new ArrayList<Object>();
-				List<RequirementDTO> gzRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : gzRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo());
-					childrenMap.put("id", item.getRequirement().getId());
-					gzList.add(childrenMap);
-				}
-				gzMap.put("text", "规则" + "(" + gzRequirements.size() + ")");
-				gzMap.put("children", gzList);
-				list.add(gzMap);
-			} else if (key.equalsIgnoreCase("jg")) {
-				Map<String, Object> jgMap = new HashMap<String, Object>();
-				List<Object> jgList = new ArrayList<Object>();
-				List<RequirementDTO> jgRequirements = (List<RequirementDTO>) beforeMap.get(key);
-				for (RequirementDTO item : jgRequirements) {
-					Map<String, Object> childrenMap = new HashMap<String, Object>();
-					childrenMap.put("text", item.getRequirement().getJiraNo());
-					childrenMap.put("id", item.getRequirement().getId());
-					jgList.add(childrenMap);
-				}
-				jgMap.put("text", "监管" + "(" + jgRequirements.size() + ")");
-				jgMap.put("children", jgList);
-				list.add(jgMap);
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<Object> list = new ArrayList<Object>();
+			List<RequirementDTO> requirements = (List<RequirementDTO>) beforeMap.get(key);
+			for (RequirementDTO item : requirements) {
+				Map<String, Object> childrenMap = new HashMap<String, Object>();
+				childrenMap.put("text", item.getRequirement().getJiraNo() + " " +item.getRequirement().getJiraDesc());
+				childrenMap.put("id", item.getRequirement().getId());
+				list.add(childrenMap);
 			}
+			map.put("children", list);
+			if (key.equalsIgnoreCase("sx")) {
+				map.put("text", "寿险" + "(" + requirements.size() + ")");
+			} else if (key.equalsIgnoreCase("cx")) {
+				map.put("text", "产险" + "(" + requirements.size() + ")");
+			} else if (key.equalsIgnoreCase("tx")) {
+				map.put("text", "团险" + "(" + requirements.size() + ")");
+			} else if (key.equalsIgnoreCase("cw")) {
+				map.put("text", "财务" + "(" + requirements.size() + ")");
+			} else if (key.equalsIgnoreCase("ds")) {
+				map.put("text", "电商" + "(" + requirements.size() + ")");
+			} else if (key.equalsIgnoreCase("gz")) {
+				map.put("text", "规则" + "(" + requirements.size() + ")");
+			} else if (key.equalsIgnoreCase("jg")) {
+				map.put("text", "监管" + "(" + requirements.size() + ")");
+			}
+			results.add(map);
 		}
-		afterMap.put("results", list);
+		afterMap.put("results", results);
 		afterMap.put("success", "获取成功");
 		return afterMap;
 	}
